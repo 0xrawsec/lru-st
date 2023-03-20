@@ -11,18 +11,18 @@ use {std::sync::Arc as Rc, std::sync::Weak};
 pub struct LruHashMap<K, V> {
     map: HashMap<Rc<K>, Cursor>,
     lru: DoublyLinkedList<(Weak<K>, V)>,
-    capacity: usize,
+    max_entries: usize,
 }
 
 impl<K, V> LruHashMap<K, V>
 where
     K: Hash + Eq,
 {
-    pub fn with_capacity(capacity: usize) -> Self {
+    pub fn with_max_entries(max_entries: usize) -> Self {
         LruHashMap {
             map: HashMap::new(),
-            lru: DoublyLinkedList::with_capacity(capacity),
-            capacity,
+            lru: DoublyLinkedList::with_capacity(max_entries),
+            max_entries,
         }
     }
 
@@ -63,7 +63,7 @@ where
         }
         // if we arrive here the key/value needs to be inserted
         // if we reached capacity, we must delete the last used entry first
-        if self.map.len() == self.capacity {
+        if self.map.len() == self.max_entries {
             if let Some((k, _v)) = self.lru.pop_back() {
                 // we put this in a block so that we can debug_assert latter
                 {
@@ -117,16 +117,16 @@ mod tests {
 
     #[test]
     fn basic_lru_hashmap() {
-        let cap = 1000;
-        let mut lru = LruHashMap::with_capacity(cap);
-        for i in 0..cap * 2 {
+        let max_entries = 1000;
+        let mut lru = LruHashMap::with_max_entries(max_entries);
+        for i in 0..max_entries * 2 {
             lru.insert(i, i)
         }
-        assert_eq!(lru.len(), cap);
+        assert_eq!(lru.len(), max_entries);
         assert_eq!(lru.get(&0), None);
-        assert_eq!(lru.get(&cap), Some(&cap));
-        lru.insert(cap + 42, 42);
-        assert_eq!(lru.get(&(cap + 42)), Some(&42));
+        assert_eq!(lru.get(&max_entries), Some(&max_entries));
+        lru.insert(max_entries + 42, 42);
+        assert_eq!(lru.get(&(max_entries + 42)), Some(&42));
         println!("{}", lru);
     }
 }
