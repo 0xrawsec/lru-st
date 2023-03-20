@@ -4,8 +4,15 @@ use std::{
     collections::HashMap,
     fmt::Display,
     hash::Hash,
-    rc::{Rc, Weak},
+    //rc::{Rc, Weak},
+    //sync::{Arc, Weak},
 };
+
+#[cfg(not(feature = "async"))]
+use std::rc::{Rc, Weak};
+
+#[cfg(feature = "async")]
+use {std::sync::Arc as Rc, std::sync::Weak};
 
 pub struct LruHashMap<K, V> {
     map: HashMap<Rc<K>, Cursor>,
