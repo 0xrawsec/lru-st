@@ -1,12 +1,6 @@
 use crate::{Cursor, DoublyLinkedList};
 
-use std::{
-    collections::HashMap,
-    fmt::Display,
-    hash::Hash,
-    //rc::{Rc, Weak},
-    //sync::{Arc, Weak},
-};
+use std::{collections::HashMap, fmt::Display, hash::Hash};
 
 #[cfg(not(feature = "async"))]
 use std::rc::{Rc, Weak};
