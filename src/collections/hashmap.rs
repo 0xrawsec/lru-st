@@ -48,6 +48,11 @@ where
     }
 
     #[inline]
+    pub fn contains_key(&mut self, k: &K) -> bool {
+        self.get(k).is_some()
+    }
+
+    #[inline]
     pub fn insert(&mut self, k: K, v: V) {
         // we update value if already there
         if self.map.contains_key(&k) {
