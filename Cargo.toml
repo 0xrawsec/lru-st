@@ -1,12 +1,26 @@
 [package]
 name = "lru-st"
-version = "0.1.0"
+version = "0.3.0"
 edition = "2021"
+rust-version = "1.70.0"
+description = "A package providing a Vec based doubly linked list implementation and related data structures"
+documentation = "https://docs.rs/lru-st"
+readme = "README.md"
+repository = "https://github.com/qjerome/lru-st"
+license-file = "LICENSE"
+keywords = ["data-structure", "doubly-linked-list", "lru", "lru-hashmap"]
 
-[features]
-async = []
-
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bench]]
+harness = false
+name = "linked_list_benchmark"
 
 [dependencies]
+thiserror = "1.0.58"
+
+[dev-dependencies]
+criterion = "0.5"
+rand = "0.8"
+
+[features]
+# feature providing thread safety
+sync = []
